@@ -74,6 +74,23 @@ Sample response:
 {'phi': 0, 'psi': -33, 'num_frames': 0, 'battery': 20, 'altitude': 0, 'ctrl_state': 131072, 'vx': 0.0, 'vy': 0.0, 'vz': 0.0, 'theta': 0}
 ```
 
+## Command-line options
+
+```
+$ python wspydrone.py --help
+Please install psyco for better video decoding performance.
+Unable to bind video decoding methods with psyco. Proceeding anyways, but video decoding will be slow!
+usage: wspydrone.py [-h] [--loglevel {error,info,debug}] [--url URL]
+
+Websocket gateway to python-ardrone
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --loglevel {error,info,debug}, -l {error,info,debug}
+                        logging level (error|info|debug)
+  --url URL, -u URL     url to connect to (default is
+                        "ws://127.0.0.1:8025/t/ardrone")
+```
 
 ## License
 

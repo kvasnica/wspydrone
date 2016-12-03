@@ -30,10 +30,15 @@ import time
 import libardrone
 import json
 import logging
+import argparse
 
-# assumes the SWSB broker is running locally at port 8025
-# (see https://github.com/kvasnica/swsb)
-WS_URL = "ws://127.0.0.1:8025/t/ardrone"
+
+parser = argparse.ArgumentParser(description='Websocket gateway to python-ardrone')
+parser.add_argument('--loglevel', '-l', default='debug', choices=['error', 'info', 'debug'],
+    help='logging level (error|info|debug)')
+parser.add_argument('--url', '-u', default="ws://127.0.0.1:8025/t/ardrone", type=str,
+    help='url to connect to (default is "ws://127.0.0.1:8025/t/ardrone")')
+args = parser.parse_args()
 
 SamplingTime = 0.5 # in seconds
 MinimalSampling = 0.05 # minimal sampling time for mesurements
@@ -43,8 +48,13 @@ drone = libardrone.ARDrone()
 logging.basicConfig(
 format='[%(asctime)s] %(levelname)s:%(filename)s:%(funcName)s: %(message)s', level=logging.ERROR)
 logger = logging.getLogger('wspydrone')
-#logger.setLevel(logging.INFO)
-logger.setLevel(logging.DEBUG)
+if args.loglevel=='error':
+    logger.setLevel(logging.ERROR)
+elif args.loglevel=='info':
+    logger.setLevel(logging.INFO)
+else:
+    logger.setLevel(logging.DEBUG)
+
 
 def trim_float(x, lb, ub):
 	# trims "x" to the interval [lb..ub]
@@ -139,9 +149,9 @@ def on_open(ws):
 	run()
 
 if __name__ == "__main__":
-	print('wspydron listening at %s' % WS_URL)
+	print('wspydrone listening at %s' % args.url)
 	logger.info("Sampling time for measurements: %f" % SamplingTime)
-	ws = websocket.WebSocketApp(WS_URL,
+	ws = websocket.WebSocketApp(args.url,
 		on_message = on_message,
 		on_error = on_error,
 		on_close = on_close)
