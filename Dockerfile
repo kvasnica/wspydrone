@@ -1,23 +1,12 @@
 # this image contains files from https://github.com/venthur/python-ardrone
 
-FROM debian:jessie
+FROM python:2-alpine
 MAINTAINER Michal Kvasnica <michal.kvasnica@gmail.com>
 
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update \
-	&& apt-get install -y --no-install-recommends \
-	curl \
-	wget \
-	joe \
-	unzip \
-	zip
-RUN apt-get install -y --no-install-recommends \
-	python \
-	python-pip
-
-RUN pip install websocket-client
-
 WORKDIR /root
+COPY requirements.txt /root/
+RUN pip install -r requirements.txt
+
 COPY *.py /root/
 ENTRYPOINT ["python", "wspydrone.py"]
 
